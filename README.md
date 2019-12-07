@@ -14,4 +14,4 @@ The programs included in this repository can all be compiled by running `make al
 
 ## License
 
-This project is licensed under the WTFPL licence - see the [LICENSE](https://github.com/dylan-robins/Peip2-engineering-project/blob/master/LICENSE) file for details.
+This project is licensed under the WTFPL licence - see the [LICENSE](https://github.com/dylan-robins/programmation-E2I3/blob/master/LICENCE) file for details.
