@@ -1,145 +1,163 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
-#define TAILLE_MEM 0x20
-#define NUL -1
-
-typedef enum {LIBRE=0, OCCUPE=-1} statut;
-typedef char info;
-typedef int adr;
 typedef struct {
-    info donnee;
-    statut etat;
-} case_mem;
+    char Num_ss[14];
+    int sexe; // 1=H, 2=F
+    int annee;
+    int mois;
+    int departement;
+    int commune;
+    int ordre;
+    int cle;
 
-void init_memoire(case_mem mem[]) {
-    for (int i = 0; i < TAILLE_MEM; i++) {
-        mem[i].etat = LIBRE;
-        mem[i].donnee = '0';
+    
+} info_ss;
+
+int Verif_cle(info_ss *num) {
+    // découper la chaine num->Num_ss en n1 et n2
+    char n1[8];
+    n1[7] = '\0';
+    strncpy(n1, num->Num_ss, 7);
+
+    char n2[7];
+    n2[6] = '\0';
+    strncpy(n2, (num->Num_ss + 7), 6);
+
+    // calculer r1 
+    int r1 = atoi(n1) % 97;
+
+    // construire n3 = str(r1)+n2
+    char n3[9];
+    sprintf(n3, "%d", r1);
+    strncat(n3, n2, 7);
+
+    // calcul du complement a 97 du reste r = n3 % 97
+    return (num->cle == (97-(atoi(n3)%97)));
+}
+
+void Traitement_info(char numero_secu[16], info_ss *secu) {
+    // N.I.R
+    strncpy(secu->Num_ss, numero_secu, 13);
+    secu->Num_ss[13] = '\0';
+    // cle
+    char cle[3];
+    cle[2] = '\0';
+    strncpy(cle, numero_secu+13, 2);
+    secu->cle = atoi(cle);
+    // sexe
+    secu->sexe = numero_secu[0] - '0';
+    // annee
+    char annee[3];
+    annee[2] = '\0';
+    strncpy(annee, numero_secu+1, 2);
+    secu->annee = atoi(annee);
+    // mois
+    char mois[3];
+    mois[2] = '\0';
+    strncpy(mois, numero_secu+3, 2);
+    secu->mois = atoi(mois);
+    // departement
+    char dep[3];
+    dep[2] = '\0';
+    strncpy(dep, numero_secu+5, 2);
+    secu->departement = atoi(dep);
+    // commune
+    char commune[4];
+    commune[3] = '\0';
+    strncpy(commune, numero_secu+7, 3);
+    secu->commune = atoi(commune);
+    // ordre
+    char ordre[4];
+    ordre[3] = '\0';
+    strncpy(ordre, numero_secu+7, 3);
+    secu->ordre = atoi(ordre);
+}
+
+void Afficher_info(info_ss *secu) {
+    printf("N.I.R: %s\n", secu->Num_ss);
+    printf("Cle: %d\n", secu->cle);
+    printf("Sexe: %d\n", secu->sexe);
+    printf("Année de naissance: %d\n", secu->annee);
+    printf("Mois de naissance: %d\n", secu->mois);
+    printf("Département de naissance: %d\n", secu->departement);
+    printf("Commune de naissance: %d\n", secu->commune);
+    printf("Numéro d'ordre': %d\n", secu->ordre);
+}
+
+void init_secu(info_ss *secu) {
+    char numero_secu[17];
+    printf("Veuillez rentrer un numéro de sécurité socale (15 chiffres)\n>>> ");
+    fgets(numero_secu, 17, stdin);
+    numero_secu[16] = '\0'; // on vire le \n en fin de ligne
+    Traitement_info(numero_secu, secu);
+}
+
+void test_statique() {
+    info_ss fausse_secu;
+    info_ss bonne_secu;
+
+    // version automatique
+    //Traitement_info("180072636200695", &fausse_secu);
+    //Traitement_info("180072636200694", &bonne_secu);
+
+    // version manuelle
+    init_secu(&fausse_secu);
+    init_secu(&bonne_secu);
+
+    // test traitement + affichage
+    printf("Faux numéro de sécurité sociale:\n");
+    Afficher_info(&fausse_secu);
+    printf("\n");
+
+    printf("Bon numéro de sécurité sociale:\n");
+    Afficher_info(&bonne_secu);
+    printf("\n");
+
+    // test fausse secu
+    if (Verif_cle(&fausse_secu)) {
+        printf(
+            "%s %d est un numero de securite sociale valide\n",
+            fausse_secu.Num_ss, fausse_secu.cle
+        );
+    } else {
+        printf(
+            "%s %d n'est pas un numero de securite sociale valide\n",
+            fausse_secu.Num_ss, fausse_secu.cle
+        );
+    }
+
+    // test bonne secu
+    if (Verif_cle(&bonne_secu)) {
+        printf(
+            "%s %d est un numero de securite sociale valide\n",
+            bonne_secu.Num_ss, bonne_secu.cle
+        );
+    } else {
+        printf(
+            "%s %d n'est pas un numero de securite sociale valide\n",
+            bonne_secu.Num_ss, bonne_secu.cle
+        );
     }
 }
 
-void afficher_memoire(case_mem mem[]) {
-    printf("    adr | donnée |  etat  \n");
-    for (int i = 0; i < TAILLE_MEM; i++) {
-        char c = mem[i].donnee;
-        if (isalnum(c)) {
-            printf(" 0x%04x | %6c | %6d \n", i, c, mem[i].etat);
-        } else {
-            printf(" 0x%04x | %6d | %6d \n", i, c, mem[i].etat);
-        }
-    }
+void test_alloc() {
+    char buffer[1024];
+    printf("Veuillez rentrer le nombre de numéros de sécurité sociale à entrer:\n>>> ");
+    fgets(buffer, 1024, stdin);
+    size_t nb_elements = atol(buffer);
+    printf("Création d'un tableau de %ld elements...\n", nb_elements);
+    info_ss *tab = (info_ss *) malloc(nb_elements * sizeof(info_ss));
+
+    free(tab);
 }
 
-int verifier_memoire_libre(case_mem mem[], adr base, int taille) {
-    for (int i = 0; i < taille; i++) {
-        if (mem[base+i].etat == OCCUPE) return 0;
-    }
-    return 1;
-}
-
-void verifier_case(case_mem mem[], adr a) {
-    if (mem[a].etat == LIBRE) {
-        fprintf(stderr, "Segmentation Fault: attempting to access unallocated block.\n");
-        exit(2);
-    } else if (a < 0 || a >= TAILLE_MEM) {
-        fprintf(stderr, "Segmentation Fault: Accessing address 0x%x in memory of size 0x%x\n", a, TAILLE_MEM);
-        exit(2);
-    }
-}
-
-void occuper_memoire(case_mem mem[], adr base, int taille) {
-    for (int i = 0; i < taille; i++) {
-        mem[base+i].etat = OCCUPE;
-    }
-}
-
-adr rechercher_bloc_libre (case_mem mem[], int taille) {
-    for (int i = 0; i < TAILLE_MEM-taille; i++) {
-        if (verifier_memoire_libre(mem, i, taille)) {
-            return i;
-        }
-    }
-    return NUL;
-}
-
-adr allouer_memoire(case_mem mem[], int taille) {
-    adr bloc_libre = rechercher_bloc_libre(mem, taille);
-    if (bloc_libre != NUL) {
-        occuper_memoire(mem, bloc_libre, taille);
-    }
-    return bloc_libre;
-}
-
-int liberer_memoire(case_mem mem[], adr base, int taille) {
-    int nb_freed = 0;
-    for (int i = 0; i < taille; i++) {
-        if (mem[base+i].etat == OCCUPE) {
-            nb_freed++;
-            mem[base+i].etat = LIBRE;
-        }
-    }
-    return nb_freed;
-}
-
-info lire_case(case_mem mem[], adr a) {
-    verifier_case(mem, a);
-    return mem[a].donnee;
-}
-
-void ecrire_case(case_mem mem[], adr a, info c) {
-    verifier_case(mem, a);
-    mem[a].donnee = c;
-}
-
-void lire_chaine(case_mem mem[], adr a, info * ch) {
-    char c = 'a'; // initialisation à autre chose que '\0'
-    int i;
-    for (i = 0; c != '\0'; i++) {
-        c = lire_case(mem, a+i);
-        ch[i] = c;
-    }
-    // rajouter le '\0' en fin de chaine
-    ch[i] = '\0';
-}
-
-void ecrire_chaine(case_mem mem[], adr a, info * ch) {
-    int i;
-    for (i = 0; i < strlen(ch)+1; i++) {
-        ecrire_case(mem, a+i, ch[i]);
-    }
-}
 
 int main() {
-    case_mem mem[TAILLE_MEM];
-    // initialiser la memoire et l'afficher
-    init_memoire(mem);
-
-    adr bloc1 = allouer_memoire(mem, 1);
-    adr bloc2 = allouer_memoire(mem, 5);
-
-    ecrire_case(mem, bloc1, '5');
-
-    info chaine1[5]  = "test";
-    ecrire_chaine(mem, bloc2, chaine1);
-    
-    liberer_memoire(mem, bloc1, 1);
-    bloc1 = allouer_memoire(mem, 3);
-
-    info chaine2[3]  = "ah";
-    ecrire_chaine(mem, bloc1, chaine2);
-
-    adr bloc3 = allouer_memoire(mem, 1);
-    ecrire_case(mem, bloc3, '1');
-
-    printf("Allocation d'un bloc de 25 alors qu'il ne reste que 22. Resultat : %d\n", allouer_memoire(mem, 25));
-    adr bloc4 = allouer_memoire(mem, 22);
-    info chaine3[27]  = "abcdefghijklmnopqrstuvwxyz";
-    printf("Ecriture de 27 chars dans un bloc réservé de 22 :\n");
-    ecrire_chaine(mem, bloc4, chaine3);
-
-    afficher_memoire(mem);
+    printf("########## TEST STATIQUE ##########\n");
+    test_statique();
+    printf("\n\n########## TEST ALLOCATION ##########\n");
+    test_alloc();
     return 0;
 }
