@@ -6,7 +6,7 @@ PROGS := $(patsubst %.c,$(BIN_DIR)/%,$(SRCS))
 all: $(BIN_DIR) $(PROGS)
 
 $(BIN_DIR)/%: %.c $(BIN_DIR)
-	gcc $< -o $@ -std=c11 -Wall -lm
+	gcc $< -o $@ -std=c11 -Wall -lm -g
 
 $(BIN_DIR):
 	mkdir $(BIN_DIR)

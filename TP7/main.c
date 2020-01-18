@@ -15,6 +15,11 @@ typedef struct {
     
 } info_ss;
 
+typedef enum {
+    TRI_AGE,
+    TRI_ALPHA
+} sort_t;
+
 int Verif_cle(info_ss *num) {
     // découper la chaine num->Num_ss en n1 et n2
     char n1[8];
@@ -71,7 +76,7 @@ void Traitement_info(char numero_secu[16], info_ss *secu) {
     // ordre
     char ordre[4];
     ordre[3] = '\0';
-    strncpy(ordre, numero_secu+7, 3);
+    strncpy(ordre, numero_secu+10, 3);
     secu->ordre = atoi(ordre);
 }
 
@@ -86,12 +91,42 @@ void Afficher_info(info_ss *secu) {
     printf("Numéro d'ordre': %d\n", secu->ordre);
 }
 
-void init_secu(info_ss *secu) {
+int init_secu(info_ss *secu) {
     char numero_secu[17];
     printf("Veuillez rentrer un numéro de sécurité socale (15 chiffres)\n>>> ");
     fgets(numero_secu, 17, stdin);
     numero_secu[16] = '\0'; // on vire le \n en fin de ligne
     Traitement_info(numero_secu, secu);
+    return Verif_cle(secu);
+}
+
+void tri(info_ss **tab_secu, size_t size, sort_t sort_type) {
+    info_ss *tmp; // servira pour inverser des éléments
+    switch (sort_type)
+    {
+    case TRI_AGE:
+        // bubble sort
+        for (size_t i = 0; i < size-1; i++) {
+            for (size_t j = i+1; j < size; j++) {
+                // si j est plus jeune que i
+                if (   (tab_secu[j]->annee < tab_secu[i]->annee)
+                    || (tab_secu[j]->annee == tab_secu[i]->annee && tab_secu[j]->mois < tab_secu[i]->mois)
+                ) {
+                    
+                    // inverser les elements
+                    tmp = tab_secu[i];
+                    tab_secu[i] = tab_secu[j];
+                    tab_secu[j] = tmp;
+                }
+            }
+        }
+        break;
+    
+    default:
+        printf("Méthode de tri non supportée\n");
+        break;
+    }
+
 }
 
 void test_statique() {
@@ -99,12 +134,12 @@ void test_statique() {
     info_ss bonne_secu;
 
     // version automatique
-    //Traitement_info("180072636200695", &fausse_secu);
-    //Traitement_info("180072636200694", &bonne_secu);
+    Traitement_info("180072636200695", &fausse_secu);
+    Traitement_info("180072636200694", &bonne_secu);
 
     // version manuelle
-    init_secu(&fausse_secu);
-    init_secu(&bonne_secu);
+    //init_secu(&fausse_secu);
+    //init_secu(&bonne_secu);
 
     // test traitement + affichage
     printf("Faux numéro de sécurité sociale:\n");
@@ -143,13 +178,46 @@ void test_statique() {
 }
 
 void test_alloc() {
-    char buffer[1024];
+    char buffer[1024]; // contiendra la ligne lue
     printf("Veuillez rentrer le nombre de numéros de sécurité sociale à entrer:\n>>> ");
     fgets(buffer, 1024, stdin);
     size_t nb_elements = atol(buffer);
     printf("Création d'un tableau de %ld elements...\n", nb_elements);
-    info_ss *tab = (info_ss *) malloc(nb_elements * sizeof(info_ss));
 
+    // Allouer la memoire necessaire pour un tableau de pointeurs d'info_ss
+    info_ss **tab = (info_ss **) malloc(nb_elements * sizeof(info_ss*));
+    // Allouer la memoire pour chaque info_ss du tableau
+    for (size_t i = 0; i < nb_elements; i++) {
+        tab[i] = (info_ss *) malloc(sizeof(info_ss));
+    }
+
+    size_t i = 0;
+    while (i != nb_elements) {
+        if (init_secu(tab[i])) {
+            // clé valide: passer au suivant
+            i++;
+        } else {
+            // Clé invalide: afficher erreur puis retenter
+            printf("Erreur, clé invalide. Veuillez réessayer :\n");
+        }
+    }
+    for (i = 0; i < nb_elements; i++) {
+        printf("%ld%s numéro dans le tableau:\n", i+1, (i==0)?"er":"ième");
+        Afficher_info(tab[i]);
+        printf("\n");
+    }
+
+    printf("\nTri selon l'age:\n");
+    tri(tab, nb_elements, TRI_AGE);
+    for (i = 0; i < nb_elements; i++) {
+        printf("%ld%s numéro dans le tableau trié:\n", i+1, (i==0)?"er":"ième");
+        Afficher_info(tab[i]);
+        printf("\n");
+    }
+
+    for (i = 0; i < nb_elements; i++) {
+        free(tab[i]);
+    }
     free(tab);
 }
 
