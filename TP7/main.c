@@ -100,33 +100,35 @@ int init_secu(info_ss *secu) {
     return Verif_cle(secu);
 }
 
-void tri(info_ss **tab_secu, size_t size, sort_t sort_type) {
-    info_ss *tmp; // servira pour inverser des éléments
+int compare_ss(info_ss *ss1, info_ss *ss2, sort_t sort_type) {
     switch (sort_type)
     {
     case TRI_AGE:
-        // bubble sort
-        for (size_t i = 0; i < size-1; i++) {
-            for (size_t j = i+1; j < size; j++) {
-                // si j est plus jeune que i
-                if (   (tab_secu[j]->annee < tab_secu[i]->annee)
-                    || (tab_secu[j]->annee == tab_secu[i]->annee && tab_secu[j]->mois < tab_secu[i]->mois)
-                ) {
-                    
-                    // inverser les elements
-                    tmp = tab_secu[i];
-                    tab_secu[i] = tab_secu[j];
-                    tab_secu[j] = tmp;
-                }
-            }
-        }
-        break;
+        // est-ce que ss2 est plus jeune que ss1 ?
+        return ss2->annee < ss1->annee || (ss2->annee == ss1->annee && ss2->mois < ss1->mois);
+    case TRI_ALPHA:
+        // est-ce que ss2 est avant ss1 selon l'ordre alphabétique?
+        return strncmp(ss1->Num_ss, ss2->Num_ss, 13) > 0;
     
     default:
-        printf("Méthode de tri non supportée\n");
-        break;
+        fprintf(stderr, "Erreur: méthode de tri non supportée\n");
+        return 0;
     }
+}
 
+void tri(info_ss **tab_secu, size_t size, sort_t sort_type) {
+    info_ss *tmp; // servira pour inverser des éléments
+    // algorithme bubble sort. Pas efficace mais facile à écrire.
+    for (size_t i = 0; i < size-1; i++) {
+        for (size_t j = i+1; j < size; j++) {
+            if (compare_ss(tab_secu[i], tab_secu[j], sort_type)) {
+                // inverser les elements
+                tmp = tab_secu[i];
+                tab_secu[i] = tab_secu[j];
+                tab_secu[j] = tmp;
+            }
+        }
+    }
 }
 
 void test_statique() {
@@ -209,6 +211,14 @@ void test_alloc() {
 
     printf("\nTri selon l'age:\n");
     tri(tab, nb_elements, TRI_AGE);
+    for (i = 0; i < nb_elements; i++) {
+        printf("%ld%s numéro dans le tableau trié:\n", i+1, (i==0)?"er":"ième");
+        Afficher_info(tab[i]);
+        printf("\n");
+    }
+
+    printf("\nTri alphabétique:\n");
+    tri(tab, nb_elements, TRI_ALPHA);
     for (i = 0; i < nb_elements; i++) {
         printf("%ld%s numéro dans le tableau trié:\n", i+1, (i==0)?"er":"ième");
         Afficher_info(tab[i]);
