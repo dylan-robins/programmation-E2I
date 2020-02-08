@@ -1,7 +1,12 @@
+// fprintf(), feof(), fopen(), fclose(), fgetc(), fputc(), feof(), FILE *
 #include <stdio.h>
+// exit()
 #include <stdlib.h>
+// strcpy(), strcat(), 
 #include <string.h>
+// basename()
 #include <libgen.h>
+// POSIX API:  stat(), access(), struct stat, S_ISDIR, S_ISREG
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
