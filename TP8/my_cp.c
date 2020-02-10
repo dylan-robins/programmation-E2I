@@ -52,13 +52,17 @@ void fcopy(const char *target, const char *source) {
     // open files and copy byte by byte
     FILE *f_in = fopen(source, "r");
     FILE *f_out = fopen(target, "w");
+    char c;
 
     if (f_in == NULL) {error(NO_SRC);} // should never happen because we've check it beforehand
     if (f_out == NULL) {error(TARGET_NULL);}
 
+    // read a first char so that afterwards we can test feof() before writing the result of the fgetc()
+    c = fgetc(f_in);
     while (!feof(f_in))
     {
-        fputc(fgetc(f_in), f_out);
+        fputc(c, f_out);
+        c = fgetc(f_in);
     }
     
     fclose(f_in);
@@ -94,7 +98,7 @@ int main(int argc, char **argv) {
             // build target name
             strcpy(target_name, argv[2]);
             strcat(target_name, "/");
-            strcat(target_name, argv[1]);
+            strcat(target_name, basename(argv[1]));
 
             // copy the file to the target
             fcopy(target_name, argv[1]);
@@ -106,7 +110,7 @@ int main(int argc, char **argv) {
         // if several source files, target must be a directory
         stat(argv[argc-1], &target_stats);
         if (access(argv[argc-1], F_OK) != 0 || !S_ISDIR(target_stats.st_mode)) {
-            error(NO_TARGET);
+            error(TOO_MANY_FILES);
         }
         // copy all sources to identically named files in target directory
         for (int i = 1; i < argc-1; i++) {

@@ -41,10 +41,11 @@ long countChars(char *filename) {
 
     f = fopen(filename, "r");
     if (f == NULL) {error(NO_TARGET);}
-
+    
+    fgetc(f);
     while (!feof(f)) {
-        fgetc(f);
         nbChars++;
+        fgetc(f);
     }
     fclose(f);
     return nbChars;

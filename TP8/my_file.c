@@ -48,9 +48,9 @@ void file_is_of_type(FILE *f, char *filetype) {
     }
     // check file type and print result
     if (is_filetype(f, type)) {
-        printf("Is a %s file.\n", filetype);
+        printf("File is a %s\n", filetype);
     } else {
-        printf("Not a %s file.\n", filetype);
+        printf("File is not a %s\n", filetype);
     }
 }
 
