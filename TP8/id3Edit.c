@@ -10,8 +10,9 @@ typedef struct {
     char artist[30];
     char album[30];
     char year[4];
-    char comment[30];
-    char genre;
+    char comment[29];
+    uint8_t track;
+    uint8_t genre;
 } id3Metadata;
 
 typedef struct {
@@ -57,7 +58,6 @@ void readMp3(FILE *mp3, Mp3Header *header, id3Metadata *metadata) {
         fprintf(stderr, "No metadata found\n");
         exit(4);
     }
-
 }
 
 void displayHeader(Mp3Header *header) {
@@ -131,6 +131,7 @@ void displayMetadata(id3Metadata *metadata) {
     printf("album: %.30s\n", metadata->album);
     printf("year: %.4s\n", metadata->year);
     printf("comment: %.30s\n", metadata->comment);
+    printf("track number: %d\n", metadata->track);
     printf("genre: ");
     // Genres ripped from here https://mutagen-specs.readthedocs.io/en/latest/id3/id3v1-genres.html with a little bit of JS magic
     // Only took the ones in the original spec, not the Winamp extention
@@ -407,7 +408,7 @@ void read_id3(char *filename) {
 
 void fill_id3(id3Metadata *metadata) {
     char buffer[2048]; // buffer for fgets
-    int genre;
+    int tmp;
     /* can't strncpy because it causes a warning. IRL would totally do it, but because it's an
        assignment I'll be pedantic about it */
     metadata->tag[0] = 'T';
@@ -442,14 +443,21 @@ void fill_id3(id3Metadata *metadata) {
     printf("Comment : \n");
     fgets(buffer, 2048, stdin);
     buffer[strlen(buffer)-1] = '\0'; // get rid of the trailing \n
-    strncpy(metadata->comment, buffer, 30);
+    strncpy(metadata->comment, buffer, 29);
+
+    // prompt for track number (and validate it)
+    do {
+        printf("Track number: \n");
+        fgets(buffer, 2048, stdin);
+    } while (sscanf(buffer, "%d", &tmp) == 0 || tmp < -1 || tmp > 79);
+    metadata->track = (char)tmp;
 
     // prompt for genre number (and validate it)
     do {
         printf("Genre number: \n");
         fgets(buffer, 2048, stdin);
-    } while (sscanf(buffer, "%d", &genre) == 0 || genre < -1 || genre > 79);
-    metadata->genre = (char)genre;
+    } while (sscanf(buffer, "%d", &tmp) == 0 || tmp < -1 || tmp > 79);
+    metadata->genre = (char)tmp;
 
 }
 

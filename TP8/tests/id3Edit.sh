@@ -40,6 +40,7 @@ artist: Louise Attaque
 album: Louise Attaque
 year: 1997
 comment: Editions Delabel
+track number: 0
 genre: Rock"
 
 data1="J't'emmene Au Vent
@@ -47,6 +48,7 @@ Louise Attaque
 Louise Attaque
 1997
 Editions Delabel
+0
 17"
 
 expected2="File size: 2940368 bytes
@@ -60,6 +62,7 @@ artist: Un artiste
 album: Je sais pas quel album
 year: 95
 comment: Commmmmmmmmmmentaireeeeeeeee
+track number: 15
 genre: Jazz"
 
 data2="Un autre titre
@@ -67,6 +70,7 @@ Un artiste
 Je sais pas quel album
 95
 Commmmmmmmmmmentaireeeeeeeee
+15
 8"
 
 # test read
