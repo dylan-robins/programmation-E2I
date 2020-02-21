@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// pythonic list structure
 typedef struct {
     int *t;
     size_t capacity;    // number of disks the peg can hold (= length of t)
@@ -67,15 +68,18 @@ void display(peg *p1, peg *p2, peg *p3) {
     peg *B = findWithLabel(p1, p2, p3, 'B');
     peg *C = findWithLabel(p1, p2, p3, 'C');
     
+    // print A's contents
     printf("A: ");
     for (size_t i = 0; i < A->nb; i++) {
         printf("%2d ", A->t[i]);
     }
+    // represent the empty end with underscores
     for (size_t i = A->nb; i < A->capacity; i++) {
         printf("__ ");
     }
     printf("\n");
 
+    // print B's contents
     printf("B: ");
     for (size_t i = 0; i < B->nb; i++) {
         printf("%2d ", B->t[i]);
@@ -85,6 +89,7 @@ void display(peg *p1, peg *p2, peg *p3) {
     }
     printf("\n");
 
+    // print C's contents
     printf("C: ");
     for (size_t i = 0; i < C->nb; i++) {
         printf("%2d ", C->t[i]);
@@ -102,10 +107,7 @@ void hanoi(peg *source, peg *target, peg *spare, int n) {
         // move n-1 disks from source to spare
         hanoi(source, spare, target, n-1);
         // move nth disk to target
-        int tmp = pop(source);
-        if (tmp == -1) {printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ERROR1\nPeg %c is already empty!\n", source->label);}
-        tmp = append(target, tmp);
-        if (tmp == 0) {printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ERROR2\nPeg %c is overfilled!\n", target->label);}
+        append(target, pop(source));
         printf("__________\n");
         display(source, spare, target);
         // move n-1 disks from spare to target

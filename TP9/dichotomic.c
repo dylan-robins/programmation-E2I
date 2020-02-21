@@ -44,7 +44,6 @@ int readList(list *l) {
         if (append(l, tmp)) {
             // clear stdin
             while (getchar() != '\n') {}
-
             // return error appending to list
             return 1;
         }
@@ -56,8 +55,8 @@ int readList(list *l) {
 
 // recursive function implementing dichotomic search
 long findInListRec(list* l, long min, long max, int n) {
-    long m = -1;
-    long M = -1;
+    long res1 = -1;
+    long res2 = -1;
 
     if (l->t[min] == n) {
         return min;
@@ -66,18 +65,18 @@ long findInListRec(list* l, long min, long max, int n) {
         return -1;
     } else {
         // look in lower half of the list
-        m = findInListRec(l, min, (max+min)/2, n);
-        if (m != -1) {return m;}
+        res1 = findInListRec(l, min, (max+min)/2, n);
+        if (res1 != -1) {return res1;}
 
         // look in upper half of the list
-        M = findInListRec(l, (min+max)/2+1, max, n);
-        if (M != -1) {return M;}
+        res2 = findInListRec(l, (min+max)/2+1, max, n);
+        if (res2 != -1) {return res2;}
 
         return -1;
     }
 }
 
-// user-friendly function for calling the dichotomic search
+// user-friendly wrapper function for calling the dichotomic search
 long findInList(list *l, int n) {
     return findInListRec(l, 0, l->len-1, n);
 }

@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <string.h>
 
+// pythonic string struct
 typedef struct {
     char *s;
     size_t len;
@@ -72,6 +73,7 @@ int palindrome(string *str, size_t n) {
 
 int main(void) {
     string *buffer = initString(256, 0);
+    // read a line, strip all the whitespace from it
     getLine(buffer, stdin);
     removeSpaces(buffer);
     
