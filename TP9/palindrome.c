@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <string.h>
 
 typedef struct {
@@ -44,6 +45,18 @@ int getLine(string *str, FILE *f) {
     return 0;
 }
 
+void removeSpaces(string *str) {
+    for (size_t i = 0; i < str->len; i++) {
+        if (isspace(str->s[i])) {
+            // shift left everything after the space
+            for (size_t j = i; j < str->len-1; j++) {
+                str->s[j] = str->s[j+1];
+            }
+            str->len--;
+        }
+    }
+}
+
 int palindrome(string *str, size_t n) {
     if (n >= str->len/2) {
         // if we got to here then it IS a palindrome
@@ -60,8 +73,9 @@ int palindrome(string *str, size_t n) {
 int main(void) {
     string *buffer = initString(256, 0);
     getLine(buffer, stdin);
-
-    printf("__________\nString <%s> %s a palindome\n", buffer->s, (palindrome(buffer, 0))?"IS":"ISN'T");
+    removeSpaces(buffer);
+    
+    printf("__________\nString %s a palindome\n", (palindrome(buffer, 0))?"IS":"ISN'T");
 
     deleteString(buffer);
 
