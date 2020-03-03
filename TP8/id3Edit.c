@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdint.h>
+#include <byteswap.h>
 
 typedef struct {
     char tag[3];
@@ -15,39 +16,32 @@ typedef struct {
     uint8_t genre;
 } id3Metadata;
 
-typedef struct {
-    uint32_t version : 1;
-    uint32_t layer : 2;
-    uint32_t error_protection : 1;
-    uint32_t bit_rate : 4;
-    uint32_t frequency : 2;
+typedef union {
+    uint32_t raw;
+    struct {
+        uint32_t end : 10;
+        uint32_t frequency : 2;
+        uint32_t bit_rate : 4;
+        uint32_t error_protection : 1;
+        uint32_t layer : 2;
+        uint32_t version : 1;
+        uint32_t head : 12;
+    } fields;
 } Mp3Header;
 
 void readMp3(FILE *mp3, Mp3Header *header, id3Metadata *metadata) {
-    uint32_t buff;
-
     // read header (32 first bits of file)
     fseek(mp3, 0, SEEK_SET);
-    fread(&buff, sizeof(uint32_t), 1, mp3);
+    fread(&(header->raw), sizeof(uint32_t), 1, mp3);
     // if the sync block (first 12 bits) aren't FFF, try flipping endienness
-    if (((buff & 0xFFF00000) >> 20) != 0xFFF) {
-        buff = ((buff>>24)&0xff) | // move byte 3 to byte 0
-               ((buff<<8)&0xff0000) | // move byte 1 to byte 2
-               ((buff>>8)&0xff00) | // move byte 2 to byte 1
-               ((buff<<24)&0xff000000); // byte 0 to byte 3
-
+    if (header->fields.head != 0xFFF) {
+        header->raw = __bswap_32(header->raw);
         // if still not good, we're stuffed
-        if (((buff & 0xFFF00000) >> 20) != 0xFFF) {
+        if (header->fields.head != 0xFFF) {
             fprintf(stderr, "Error: file isn't an MP3!\n");
             exit(2);
         }
     }
-    // fill in header data
-    header->version = (buff & 0x00080000) >> 19;
-    header->layer = (buff & 0x00060000) >> 17;
-    header->error_protection = (buff & 0x00010000) >> 16;
-    header->bit_rate = (buff & 0x0000F000) >> 12;
-    header->frequency = (buff & 0x00000C00) >> 10;
 
     // ID3v1.1 block is the last 128 bytes of the file
     fseek(mp3, -128, SEEK_END);
@@ -63,7 +57,7 @@ void readMp3(FILE *mp3, Mp3Header *header, id3Metadata *metadata) {
 void displayHeader(Mp3Header *header) {
     // Meaning of bytes taken from http://www.mp3-tech.org/programmer/frame_header.html
     printf("Version: ");
-    switch (header->version) {
+    switch (header->fields.version) {
         case 0:
             printf("MPEG2\n");
             break;
@@ -76,7 +70,7 @@ void displayHeader(Mp3Header *header) {
     }
 
     printf("Layer: ");
-    switch (header->layer) {
+    switch (header->fields.layer) {
         case 1:
             printf("Layer III\n");
             break;
@@ -91,35 +85,35 @@ void displayHeader(Mp3Header *header) {
             break;
     }
 
-    printf("CRC protection: %s\n", (header->error_protection == 0)?"yes":"no");
+    printf("CRC protection: %s\n", (header->fields.error_protection == 0)?"yes":"no");
 
     printf("Bitrate: ");
-    if (header->version == 1 && header->layer == 0) {
+    if (header->fields.version == 1 && header->fields.layer == 0) {
         int bitrates[] = {0, 32, 64, 96, 128, 160, 192, 224, 256, 288, 320, 352, 384, 416, 448, -1};
-        printf("%d kbps\n", bitrates[header->bit_rate]);
-    } else if (header->version == 1 && header->layer == 2) {
+        printf("%d kbps\n", bitrates[header->fields.bit_rate]);
+    } else if (header->fields.version == 1 && header->fields.layer == 2) {
         int bitrates[] = {0, 32, 48, 56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, 384, -1};
-        printf("%d kbps\n", bitrates[header->bit_rate]);
-    } else if (header->version == 1 && header->layer == 1) {
+        printf("%d kbps\n", bitrates[header->fields.bit_rate]);
+    } else if (header->fields.version == 1 && header->fields.layer == 1) {
         int bitrates[] = {0, 32, 40, 48,  56,  64,  80,  96, 112, 128, 160, 192, 224, 256, 320, -1};
-        printf("%d kbps\n", bitrates[header->bit_rate]);
-    } else if (header->version == 0 && header->layer == 0) {
+        printf("%d kbps\n", bitrates[header->fields.bit_rate]);
+    } else if (header->fields.version == 0 && header->fields.layer == 0) {
         int bitrates[] = {0, 32, 48, 56,  64,  80,  96, 112, 128, 144, 160, 176, 192, 224, 256, -1};
-        printf("%d kbps\n", bitrates[header->bit_rate]);
-    } else if (header->version == 0 && (header->layer == 1 || header->layer == 2)) {
+        printf("%d kbps\n", bitrates[header->fields.bit_rate]);
+    } else if (header->fields.version == 0 && (header->fields.layer == 1 || header->fields.layer == 2)) {
         int bitrates[] = {0, 8,  16, 24,  32,  40,  48,  56,  64,  80,  96, 112, 128, 144, 160, -1};
-        printf("%d kbps\n", bitrates[header->bit_rate]);
+        printf("%d kbps\n", bitrates[header->fields.bit_rate]);
     } else {
         printf("Unknown\n");
     }
 
     printf("Sample rate: ");
-    if (header->version == 1) {
+    if (header->fields.version == 1) {
         int samplerates[] = {44100, 48000, 32000};
-        printf("%d Hz\n", samplerates[header->frequency]);
-    } else if (header->version == 0) {
+        printf("%d Hz\n", samplerates[header->fields.frequency]);
+    } else if (header->fields.version == 0) {
         int samplerates[] = {22050, 24000, 16000};
-        printf("%d Hz\n", samplerates[header->frequency]);
+        printf("%d Hz\n", samplerates[header->fields.frequency]);
     } else {
         printf("Unknown\n");
     }
