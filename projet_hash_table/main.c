@@ -15,9 +15,17 @@ int main(void) {
         "langage",
         "C"
     };
-    uint32_t table_size = 500;
     for (int i = 0; i < 9; i++) {
-        printf("Test sequence: <%s>,\thash = %d\n", strings[i], hash(strings[i]) % table_size);
+        printf("Test sequence: <%s>,\thash = %d\n", strings[i], hash(strings[i], 500));
     }
+
+    hash_table *table = new_hash_table(500);
+    set(table, "toto", 0);
+    set(table, "meaning of life", 69);
+    set(table, "meaning of life", 42);
+    printf("toto: %d; meaning of life: %d\n", search(table, "toto"), search(table, "meaning of life"));
+    delete(table, "toto");
+    delete_hash_table(table);
+
     return 0;
 }

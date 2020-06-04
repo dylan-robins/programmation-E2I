@@ -13,7 +13,7 @@ $(BIN_DIR)/main: $(OBJS)
 
 # object file compilation
 $(OBJ_DIR)/%.o: %.c
-	gcc -c $< -o $@ -std=c11 -Wall
+	gcc -c $< -o $@ -std=c11 -Wall -g
 
 dirs:
 	mkdir -p $(OBJ_DIR) $(BIN_DIR)
