@@ -1,24 +1,22 @@
 BIN_DIR := ./bin
 OBJ_DIR := ./obj
-SRCS := $(wildcard *.c)
-OBJS := $(patsubst %.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-# Default: compile main program
-all: dirs $(BIN_DIR)/main
+all: $(OBJ_DIR) $(BIN_DIR) $(BIN_DIR)/dico
 
-# main program linking rule: first make the bin directory, then link
-$(BIN_DIR)/main: $(OBJS)
-	echo $(OBJS)
-	gcc $(OBJS) -o $@
+COPTS := -g -Wall -pedantic
 
-# object file compilation
+$(BIN_DIR)/dico: fonctions_prof.o $(OBJ_DIR)/dico.o $(OBJ_DIR)/fonctions.o
+	gcc $(COPTS) $^ -o $(BIN_DIR)/dico
+
 $(OBJ_DIR)/%.o: %.c
-	gcc -c $< -o $@ -std=c11 -Wall -g
+	gcc $(COPTS) -c $^ -std=c11 -o $@
 
-dirs:
-	mkdir -p $(OBJ_DIR) $(BIN_DIR)
-
+$(BIN_DIR):
+	mkdir $(BIN_DIR)
+$(OBJ_DIR):
+	mkdir $(OBJ_DIR)
+	
 clean:
-	rm -r $(BIN_DIR) $(OBJ_DIR)
-
-.PHONY: all clean dirs
+	@rm -r $(OBJ_DIR) $(BIN_DIR)
+	
+.PHONY: all clean
