@@ -20,22 +20,27 @@ int main(int argc, char *argv[]) {
     /* programme de test du correcteur d'orthographe */
     FILE *dic;
     NOEUD_DICO *tete;
+    NOEUD_DICO **Table;
     char dico_filename[256] = "fr_FR.dic";
     int tmp;
+    int min, max, moy;
+    int ref_min = 700000, ref_max = 0, ref_moy = 0;
     clock_t timer;
-
-    srand(time(NULL));
 
     if (argc == 2) {
         strcpy(dico_filename, argv[1]);
     }
+    /*************************************************************************/
+    /*                     PARTIE 1 - DICO LISTE CHAINEE                     */
+    /*************************************************************************/
 
-    /* On construit la liste de mots */
+    /************************ CONSTRUCTION DE LA LISTE ***********************/
     printf("*** Dictionnaire : 1ere partie ***\n");
     printf("*** Construction d'une liste chainee simple ***\n\n");
     dic = fopen("fr_FR.dic", "r");
     tete = _construire_liste(dic);
 
+    /************************ COMPTE DU NOMBRE DE MOTS ***********************/
     printf("Nombre de noeuds de la liste (iteratif) : %d\n", compter_mots_liste(tete));
     if (compter_mots_liste(tete)==_compter_mots_liste(tete)) {
         printf("\t> %sPASS%s\n", BLU, NRM);
@@ -43,6 +48,7 @@ int main(int argc, char *argv[]) {
         printf("\t> %sFAIL%s\n", RED, NRM);
     }
 
+    /******************** RECHERCHE D'UN MOT DANS LA LISTE *******************/
     printf("<chien> est dans la liste : %s\n", rechercher_mots_liste(tete, "chien")?"Oui":"Non");
     if (rechercher_mots_liste(tete, "chien")) {
         printf("\t> %sPASS%s\n", BLU, NRM);
@@ -50,6 +56,7 @@ int main(int argc, char *argv[]) {
         printf("\t> %sFAIL%s\n", RED, NRM);
     }
 
+    /********************* AJOUT D'UN MOT DANS LA LISTE **********************/
     printf("<microcontrolleur> est dans la liste : %s\n", rechercher_mots_liste(tete, "microcontrolleur")?"Oui":"Non");
     tmp = rechercher_mots_liste(tete, "microcontrolleur");
     printf("Ajout du mot <microcontrolleur>\n");
@@ -60,6 +67,7 @@ int main(int argc, char *argv[]) {
         printf("\t> %sFAIL%s\n", RED, NRM);
     }
 
+    /*********************** VERIFICATION D'UN FICHIER ***********************/
     timer = clock();
     tmp = check_file_list(tete, "texte.txt");
     timer = clock() - timer;
@@ -70,19 +78,23 @@ int main(int argc, char *argv[]) {
     } else {
         printf("\t> %sFAIL%s\n", RED, NRM);
     }
+
+    // cleanup
     detruire_liste(tete);
     fclose(dic);
 
-    /* A decommenter pour la 2ieme partie de l'exam */
+    /*************************************************************************/
+    /*                    PARTIE 2 - DICO TABLE DE HACHAGE                   */
+    /*************************************************************************/
 
-    int min, max, moy;
-    int ref_min = 700000, ref_max = 0, ref_moy = 0;
-    NOEUD_DICO **Table;
     dic = fopen("fr_FR.dic", "r");
+
+    /****************** CONSTRUCTION DE LA TABLE DE HACHAGE ******************/
     printf("\n\n*** Dictionnaire : 2ieme partie ***\n");
     printf("*** Construction d'une table de hachage ***\n\n");
     Table = construire_hash(dic);
 
+    /********************* CALCUL DES STATS DE LA TABLE **********************/
     calculer_statistique_hash(Table, &min, &max, &moy);
     printf("Longueur de la liste la plus courte : %d\n", min);
     printf("Longueur de la liste la plus longue : %d\n", max);
@@ -94,6 +106,7 @@ int main(int argc, char *argv[]) {
         printf("\t> %sFAIL%s\nmin: %d==%d; max: %d==%d; moy: %d==%d\n", RED, NRM, ref_min, min, ref_max, max, ref_moy, moy);
     }
 
+    /******************* RECHERCHE D'UN MOT DANS LA TABLE ********************/
     tmp = rechercher_mot_hash(Table, "chien");
     printf("<chien> est dans la table : %s\n", tmp?"Oui":"Non");
     if (tmp) {
@@ -102,6 +115,7 @@ int main(int argc, char *argv[]) {
         printf("\t> %sFAIL%s\n", RED, NRM);
     }
     
+    /*********************** VERIFICATION D'UN FICHIER ***********************/
     timer = clock();
     tmp = check_file_hash(Table, "texte.txt");
     timer = clock() - timer;
@@ -113,6 +127,7 @@ int main(int argc, char *argv[]) {
         printf("\t> %sFAIL%s\n", RED, NRM);
     }
 
+    // cleanup
     detruire_table(Table);
     fclose(dic);
 
