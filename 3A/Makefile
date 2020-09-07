@@ -1,4 +1,4 @@
-SUBDIRS := $(wildcard ./[3-5]A)
+SUBDIRS := $(wildcard ./TP*)
 
 all: $(SUBDIRS)
 
