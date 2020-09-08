@@ -1,8 +1,8 @@
-# Programmation - E2I3
+# Programmation - E2I
 
 ## What is this?
 
-This is a repository containing all the programs I’ve written for my *Algorithmique et programmation* class. It’s intended mainly as a backup in case anything happens to my computer, but if it’s useful to you that’s great.
+This is a repository containing all the programs I’ve written for my various programming classes during my E2I course. It’s intended mainly as a backup in case anything happens to my computer, but if it’s useful to you that’s great.
 
 ## Compiling
 
