@@ -14,4 +14,4 @@ $(BIN_DIR):
 clean:
 	rm -r $(BIN_DIR)
 
-.PHONY: all clean
+.PHONY: clean
