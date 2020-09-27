@@ -1,8 +1,12 @@
 #include <iostream>
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 #include "vec3d.h"
 #include "pile.h"
 int Pile::_nb_objets = 0;
+#include "point.h"
+
 
 using namespace std;
 
@@ -35,6 +39,19 @@ int main(void) {
     cout << "Nombre de piles créées: " << p1.nb_objets() << endl;
 
     cout << endl << "########## Exercice 3 ##########" << endl;
+
+    Point p;
+    cout << "Créé un point aux coordonnées (" << p.abscisse() << "," << p.ordonnee() << "}" << endl;
+    p.translate(3, 4);
+    cout << "Bougé le point selon le vecteur (3, 4) : (" << p.abscisse() << "," << p.ordonnee() << "}" << endl;
+    
+    cout << "Coordonnées polaires (" << p.rho() << "," << p.teta() << "}" << endl;
+
+    p.rotation(M_PI);
+    cout << "Rotation du point de pi radians : (" << p.abscisse() << "," << p.ordonnee() << "}" << endl;
+    p.set_deg();
+    p.rotation(-45);
+    cout << "Rotation du point de -45° : (" << p.abscisse() << "," << p.ordonnee() << "}" << endl;
 
     return 0;
 }
