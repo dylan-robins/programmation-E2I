@@ -1,12 +1,11 @@
-#include <iostream>
-#include <cmath>
-
 #include "point.h"
+
+#include <cmath>
+#include <iostream>
 
 Point::Point() {
     _x = 0;
     _y = 0;
-
 }
 Point::Point(const double x, const double y) : _x(x), _y(y) {
     set_rad();
@@ -37,12 +36,12 @@ double Point::teta() {
     return atan(_y / _x);
 }
 
-void Point::translate (const double x_off, const double y_off) {
+void Point::translate(const double x_off, const double y_off) {
     _x += x_off;
     _y += y_off;
 }
 
-void Point::rotation (const double angle) {
+void Point::rotation(const double angle) {
     double old_x = _x;
     double old_y = _y;
     _x = cos(angle) * old_x - sin(angle) * old_y;

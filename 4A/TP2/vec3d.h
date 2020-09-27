@@ -5,6 +5,7 @@ public:
     Vecteur3d(const Vecteur3d &a_copier);
     ~Vecteur3d() {}
     void afficher() const;
+
 private:
     double _x;
     double _y;

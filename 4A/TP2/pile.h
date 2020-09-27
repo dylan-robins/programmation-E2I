@@ -15,13 +15,14 @@ public:
 
     static int nb_objets() { return _nb_objets; }
 
-
 private:
     const int _max;
     int* _table;
     int _nb_elem;
-    enum pile_etat { ok, plein, vide };
+    enum pile_etat { ok,
+                     plein,
+                     vide };
     pile_etat _etat;
-    
+
     static int _nb_objets;
 };
