@@ -25,4 +25,7 @@ $(OBJ_DIR):
 clean:
 	rm -rf $(BIN_DIR) $(OBJ_DIR) test
 
+tar: clean
+	tar cvzf TP_ROBINS.tgz ./*
+
 .PHONY: clean

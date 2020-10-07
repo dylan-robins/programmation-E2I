@@ -33,7 +33,11 @@ double Point::rho() {
 }
 
 double Point::teta() {
-    return atan(_y / _x);
+    double teta = atan(_y / _x);
+    if (_mode == mode_t::deg) {
+        teta = teta * 180 / M_PI;
+    }
+    return teta;
 }
 
 void Point::translate(const double x_off, const double y_off) {

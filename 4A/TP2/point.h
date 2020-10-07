@@ -10,7 +10,7 @@ public:
     double teta();  // teta en radians
 
     void translate(const double x_off, const double y_off);
-    void rotation(const double angle);  // angle en radians
+    void rotation(const double angle);  // unité dépend de _mode
 
     void set_deg();
     void set_rad();
@@ -18,7 +18,6 @@ public:
 private:
     double _x;
     double _y;
-    enum mode_t { rad,
-                  deg };
+    enum mode_t { rad, deg };
     mode_t _mode;
 };

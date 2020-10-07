@@ -46,7 +46,10 @@ int main(void) {
     p.translate(3, 4);
     cout << "Bougé le point selon le vecteur (3, 4) : (" << p.abscisse() << "," << p.ordonnee() << "}" << endl;
 
-    cout << "Coordonnées polaires (" << p.rho() << "," << p.teta() << "}" << endl;
+    cout << "Coordonnées polaires en radians : (" << p.rho() << "," << p.teta() << "}" << endl;
+    p.set_deg();
+    cout << "Coordonnées polaires en degrés : (" << p.rho() << "," << p.teta() << "}" << endl;
+    p.set_rad();
 
     p.rotation(M_PI);
     cout << "Rotation du point de pi radians : (" << p.abscisse() << "," << p.ordonnee() << "}" << endl;
