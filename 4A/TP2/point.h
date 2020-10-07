@@ -7,7 +7,7 @@ public:
     double abscisse();
     double ordonnee();
     double rho();
-    double teta();  // teta en radians
+    double teta();  // unité dépend de _mode
 
     void translate(const double x_off, const double y_off);
     void rotation(const double angle);  // unité dépend de _mode
