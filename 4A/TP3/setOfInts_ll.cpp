@@ -15,23 +15,24 @@ SetOfInts_ll::~SetOfInts_ll() {
 
 long SetOfInts_ll::indexOf(const int elem) {
     Node *current = _tete;  // curseur pour parcourir la liste chainée
-    long index = -1;
+    long index = 0;
     // trouver l'élément à supprimer
     while (current != nullptr) {
         if (current->_val == elem) {
             // on l'a trouvé : arrêter de chercher
-            break;
+            return index;
         }
         // avancer le curseur de parcours
         current = current->_next;
         index++;
     }
-    return index;
+    return -1;
 }
 
 void SetOfInts_ll::add(const int elem) {
-    if (indexOf(elem) != -1) {
+    if (indexOf(elem) == -1) {
         Node *new_node = new Node(elem, _tete);
+        _len ++;
         _tete = new_node;
     }
 }
@@ -54,6 +55,7 @@ void SetOfInts_ll::remove(const int elem) {
         to_del = current;
         previous->_next = current->_next;
         delete current;
+        _len--;
     }
 }
 
@@ -67,6 +69,7 @@ void SetOfInts_ll::display() {
     cout << "{";
     while (current != nullptr) {
         cout << current->_val << " ";
+        current = current->_next;
     }
     cout << "}";
 }

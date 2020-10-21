@@ -4,10 +4,17 @@
 #include "poly2deg.h"
 #include "setOfIntegers.h"
 #include "setOfInts_ll.h"
+#include "vecteur3d.h"
+#include "matrice.h"
 
 using namespace std;
 
+#define TEST_EX1
+#define TEST_EX2
+#define TEST_EX3
+
 int main(void) {
+    #ifdef TEST_EX1
     cout << "########## Exercice 1 ##########" << endl;
     Complexe a(1, 1);
     Complexe b(3, -4);
@@ -57,8 +64,10 @@ int main(void) {
     cout << "Solution de P: ";
     res.afficher();
 
+    #endif
+    #ifdef TEST_EX2
     cout << "########## Exercice 2 ##########" << endl;
-    SetOfIntegers set(10);
+    Set_Of_Integer set(10);
     int tmp;
     for (int i = 0; i < 10; i++) {
         cout << "Entrez un entier : >>> ";
@@ -80,5 +89,34 @@ int main(void) {
     set_ll.display();
     cout << "Il y a " << set_ll.cardinal() << " nombres distincts dans le tableau." << endl;
 
+    #endif
+    #ifdef TEST_EX3
+    cout << "########## Exercice 3 ##########" << endl;
+    
+    Vecteur3d v;
+    cout << "Valeurs vecteur initiales :" << endl;
+    v.display();
+
+    v = Vecteur3d(1, 2, 3);
+    cout << "Valeurs vec (1 2 3) :" << endl;
+    v.display();
+
+    const double tab3[3][3] = {
+        {1,   2,   3  },
+        {11,  22,  33 },
+        {111, 222, 333}
+    };
+    Matrice m(tab3);
+    cout << "Matrice tab3 :" << endl;
+    m.display();
+
+    cout << "vec * tab3 =" << endl;
+    m.produit_vec_mat(v).display();
+
+
+    cout << "tab3 * vec =" << endl;
+    m.produit_mat_vec(v).display();
+
+    #endif
     return 0;
 }

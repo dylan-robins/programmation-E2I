@@ -1,6 +1,6 @@
 BIN_DIR := ./bin
 OBJ_DIR := ./obj
-OBJS := $(patsubst %, $(OBJ_DIR)/%.o, main vecteur3D matrice setOfIntegers setOfInts_ll complexe poly2deg)
+OBJS := $(patsubst %, $(OBJ_DIR)/%.o, main setOfIntegers setOfInts_ll complexe poly2deg vecteur3d matrice)
 
 all: $(BIN_DIR) $(OBJ_DIR) $(BIN_DIR)/test
 

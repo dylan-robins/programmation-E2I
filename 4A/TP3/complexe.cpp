@@ -19,7 +19,7 @@ void Complexe::afficher() {
         cout << re() << im() << "i" << endl;
     } else {
         cerr << endl << "Error: invalid complex number " << re() << "+" << im() << "i" << endl;
-        exit(1);
+        exit(EXIT_FAILURE);
     }
 }
 
