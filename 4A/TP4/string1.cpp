@@ -142,3 +142,14 @@ ostream& operator<<(ostream& os, const String& str) {
 bool egal(const String& ch1, const String& ch2) {
     return (ch1.longueur() == ch2.longueur()) && strcmp(ch1._str, ch2._str) == 0;
 }
+
+
+String& String::operator=(const String& to_copy) {
+    if (&to_copy != this) {
+        _len = to_copy._len;
+        _capacity = to_copy._capacity;
+        _str = new char[_capacity];
+        strncpy(_str, to_copy._str, _len);
+    }
+    return *this;
+}

@@ -35,6 +35,7 @@ public:
 
     char operator[](const unsigned long i) const;
     char& operator[](const unsigned long i);
+    String& operator=(const String& to_copy);
 };
 
 #endif
