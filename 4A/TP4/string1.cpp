@@ -27,9 +27,9 @@ String::String(const char c) {
 String::String(const char * buff) {
     unsigned long buff_size = strlen(buff);
 
-    _str = new char[buff_size];
+    _str = new char[buff_size+1];
     _len = buff_size;
-    _capacity = buff_size;
+    _capacity = buff_size+1;
     strcpy(_str, buff);
 }
 
@@ -42,8 +42,8 @@ String::String(const String& str) {
 
 String::String(const unsigned long size) {
     _len = 0;
-    _capacity = size;
-    _str = new char[size];
+    _capacity = size+1;
+    _str = new char[size+1];
     strcpy(_str, "");
 }
 
@@ -94,14 +94,14 @@ void String::saisie() {
 
 void String::concatene(const char * suffix) {
     if (_len + strlen(suffix) > _capacity) {
-        _extend(_len + strlen(suffix));
+        _extend(_len + strlen(suffix) + 1);
     }
     strcat(_str, suffix);
 }
 
 void String::concatene(const String& suffix) {
     if (_len + suffix.longueur() > _capacity) {
-        _extend(_len + suffix.longueur());
+        _extend(_len + suffix.longueur() + 1);
     }
     strcat(_str, suffix._str);
 }
