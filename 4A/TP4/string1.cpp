@@ -1,6 +1,7 @@
 #include "string1.h"
 
 #include <iostream>
+#include <iomanip>
 #include <cstring>
 #include <cctype>
 
@@ -74,7 +75,7 @@ String::String(const String& str, const unsigned long size) {
 
 // DESTRUCTOR
 String::~String() {
-    delete _str;
+    delete[] _str;
 }
 
 // CLASS METHODS
@@ -89,7 +90,11 @@ void String::affiche() const{
     cout << _str << endl;
 }
 void String::saisie() {
-    cin >> _str;
+    char buffer[2048];
+    cin >> setw(2048) >> buffer;
+    _capacity = strlen(buffer) + 1;
+    _extend(_capacity);
+    strcpy(_str, buffer);
 }
 
 void String::concatene(const char * suffix) {
@@ -124,8 +129,8 @@ char& String::operator[](unsigned long i) {
 void String::_extend(const unsigned long new_size) {
     // allouer nouveau char * assez grand
     char * new_str = new char[new_size];
-    strcpy(new_str, _str);
-    delete _str;
+    strncpy(new_str, _str, new_size-1);
+    delete [] _str;
 
     _str = new_str;
     _len = new_size;
