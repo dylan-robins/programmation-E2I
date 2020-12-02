@@ -7,7 +7,7 @@ using namespace std;
 
 // Définitions classe salarie
 
-salarie::salarie(char *nom, int bureau) {
+salarie::salarie(const char *nom, int bureau) {
     _nom = new char[strlen(nom) + 1];
     strcpy(_nom, nom);
     set_bureau(bureau);
@@ -28,8 +28,8 @@ void salarie::set_bureau(int bureau) {
     _bureau = bureau;
 }
 
-char *salarie::get_telephone() {
-    static char *telephone[] = {"001", "002", "003", "004", "005", "006"};
+const char *salarie::get_telephone() {
+    static const char *telephone[] = {"001", "002", "003", "004", "005", "006"};
     int nb_tels = sizeof(telephone) / sizeof(*telephone);  // 6
     if (_bureau > 0 && _bureau <= nb_tels)
         return telephone[_bureau - 1];
@@ -43,7 +43,7 @@ unsigned long salarie::get_nb_salaries() {
 
 // Définitions classe employe
 
-employe::employe(char *nom, int bureau,
+employe::employe(const char *nom, int bureau,
                  float taux_horaire, float nb_heures) : salarie(nom, bureau) {
     set_taux(taux_horaire);
     set_heures(nb_heures);
@@ -56,8 +56,8 @@ employe::~employe() {
 
 void employe::afficher() {
     salarie::afficher();
-    cout << "taux_h : " << _taux_horaire << endl
-         << "heures work : " << _nb_heures << endl;
+    cout << "taux horaire : " << _taux_horaire << endl
+         << "heures travaillées : " << _nb_heures << endl;
 }
 
 void employe::set_taux(float taux_horaire) {
@@ -79,7 +79,7 @@ unsigned long employe::get_nb_employes() {
 
 // Définitions classe commercial
 
-commercial::commercial(char *nom, float chiffre_affaire, int bureau, float taux_horaire,
+commercial::commercial(const char *nom, float chiffre_affaire, int bureau, float taux_horaire,
                float nb_heures, float pourcentage) : employe(nom, bureau, taux_horaire, nb_heures) {
     set_pourcentage(pourcentage);
     set_chiffre_affaire(chiffre_affaire);
@@ -114,7 +114,7 @@ unsigned long commercial::get_nb_commerciaux() {
 
 // Définitions classe directeur
 
-directeur::directeur(char *nom, int bureau, float fixe,
+directeur::directeur(const char *nom, int bureau, float fixe,
                      float prime, int nb_employes)
     : salarie(nom, bureau) {
     set_fixe(fixe);
@@ -130,7 +130,7 @@ directeur::~directeur() {
 void directeur::afficher() {
     salarie::afficher();
     cout << "salaire fixe : " << _fixe << endl
-         << "la prime : " << _prime << endl
+         << "prime : " << _prime << endl
          << "nombre de salarié : " << _nb_employe << endl;
 }
 

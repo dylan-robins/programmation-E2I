@@ -5,9 +5,9 @@
 using namespace std;
 
 void ListePoints::afficher() {
-    cout << "[" << premier();
+    cout << "[" << *(Point *)premier();
     while (!fini()) {
-        cout << ", " << prochain();
+        cout << ", " << *(Point *)prochain();
     }
     cout << "]" << endl;
 }

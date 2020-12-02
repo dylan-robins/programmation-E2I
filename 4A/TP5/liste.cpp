@@ -32,5 +32,5 @@ void * Liste::prochain() {
 }
 
 bool Liste::fini() {
-    return (_courant == nullptr);
+    return (_courant->suivant == nullptr);
 }

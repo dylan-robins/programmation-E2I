@@ -9,8 +9,11 @@ using namespace std;
 /*                          Réponses aux questions                           */
 /*                                                                           */
 /* Q1.2 :                                                                    */
-/*     L'instruction `Pointcol P1(2.5, 3.25, 5);` crée un point de coords    */
-/*     (2.5, 3.25) de la 5e couleur de la liste (bleu)                       */
+/*     L'instruction `Pointcol P1(2.5, 3.25, 5);` ne fonctionne pas étant    */
+/*     donné que j'ai numéroté mes couleurs selon leur valeur ANSI au lieu   */
+/*     de 0 à N. Si j'avais numéroté mes couleurs de la façon attendue,      */
+/*     l'instruction crééerait un point de coordonnées (2.5,3.25) et de      */
+/*     couleur bleue.                                                        */
 /*                                                                           */
 /* Q1.3 :                                                                    */
 /*     Pour implémenter Pointcol sans héritage il faudrait dupliquer toutes  */
@@ -55,6 +58,7 @@ public:
 
 private:
     double _x, _y;
+    friend ostream& operator<<(ostream& os, const Point& point);
 };
 
 class Pointcol : public Point {

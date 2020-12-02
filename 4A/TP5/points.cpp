@@ -16,11 +16,15 @@ Point::Point(double abs = 0.0, double ord = 0.0) {
     _y = ord;
 }
 void Point::affiche() const {
-    cout << "(" << _x << "," << _y << ")";
+    cout << this << endl;
 }
 void Point::deplace(double dx, double dy) {
     _x = _x + dx;
     _y = _y + dy;
+}
+ostream& operator<<(ostream& os, const Point& point) {
+    os << "(" << point._x << "," << point._y << ")";
+    return os;
 }
 
 Pointcol::Pointcol() : Point() {
@@ -41,5 +45,5 @@ void Pointcol::set_colour(const Colour col) {
 
 void Pointcol::affiche() const {
     Colour rst(col_t::reset);
-    cout << _colour << "(" << get_x() << ", " << get_y() << ")" << rst << endl;
+    cout << _colour << (Point) *this << rst << endl;
 }

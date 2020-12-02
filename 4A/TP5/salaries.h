@@ -1,10 +1,10 @@
 class salarie {
    public:
-    salarie(char *nom, int bureau = 0);
+    salarie(const char *nom, int bureau = 0);
     ~salarie();
     void afficher();
     void set_bureau(int bureau);
-    char *get_telephone();
+    const char *get_telephone();
     static unsigned long get_nb_salaries();
 
    private:
@@ -15,7 +15,7 @@ class salarie {
 
 class employe : public salarie {
    public:
-    employe(char *nom, int bureau = 0, float taux_horaire = 0.0, float nb_heures = 0.0);
+    employe(const char *nom, int bureau = 0, float taux_horaire = 0.0, float nb_heures = 0.0);
     ~employe();
     void afficher();
     void set_taux(float taux_horaire);
@@ -31,7 +31,7 @@ class employe : public salarie {
 
 class commercial : public employe {
    public:
-    commercial(char *nom, float chiffre_affaire, int bureau = 0, float taux_horaire = 0.0,
+    commercial(const char *nom, float chiffre_affaire, int bureau = 0, float taux_horaire = 0.0,
                float nb_heures = 0.0, float pourcentage = 0.0);
     ~commercial();
     void afficher();
@@ -48,7 +48,7 @@ class commercial : public employe {
 
 class directeur : public salarie {
    public:
-    directeur(char *nom, int bureau = 0, float fixe = 0.0,
+    directeur(const char *nom, int bureau = 0, float fixe = 0.0,
               float prime = 0.0, int nb_employe = 0);
     ~directeur();
     void afficher();
