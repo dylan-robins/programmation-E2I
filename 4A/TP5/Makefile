@@ -1,6 +1,7 @@
 BIN_DIR := ./bin
 OBJ_DIR := ./obj
-OBJS := $(patsubst %, $(OBJ_DIR)/%.o, main points)
+
+OBJS := $(patsubst %, $(OBJ_DIR)/%.o, main points salaries liste liste_points)
 
 all: $(BIN_DIR) $(OBJ_DIR) $(BIN_DIR)/test
 
