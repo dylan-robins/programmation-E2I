@@ -5,6 +5,7 @@
 #include "string2.h"
 
 #define EX3
+#define EX3_float
 
 int main(void) {
 #ifdef EX1
@@ -75,7 +76,7 @@ int main(void) {
 #ifdef EX3
     cout << "################################# Exercice 3 ##################################" << endl;
 
-    W_File_of_Int f_out("essai.fic");
+    W_File_of_Int<int> f_out("essai.fic");
     if (!f_out) {
         cerr << "erreur à la création de 'essai.fic'\n";
         return 1;
@@ -87,7 +88,7 @@ int main(void) {
     cout << endl;
     /////////////////////////////////////////////////////////////////
 
-    R_File_of_Int f_in("essai.fic");
+    R_File_of_Int<int> f_in("essai.fic");
     int entier;
     if (!f_in) {
         cerr << "erreur à la création de essai.fic\n";
@@ -108,7 +109,7 @@ int main(void) {
     cout << endl;
     /////////////////////////////////////////////////////////////////
 
-    RW_File_of_Int f_io("essai.fic"); //s’il existe, il n'est pas écrasé
+    RW_File_of_Int<int> f_io("essai.fic"); //s’il existe, il n'est pas écrasé
     if (!f_io) {
         cerr << "erreur à la création de essai.fic\n";
         return 1;
@@ -128,5 +129,62 @@ int main(void) {
     f_io.close();
     cout << endl;
 #endif
+#ifdef EX3_float
+    cout << "######################### Exercice 3 - avec des floats ########################" << endl;
+
+    W_File_of_Int<float> f_out_float("essai.fic");
+    if (!f_out_float) {
+        cerr << "erreur à la création de 'essai.fic'\n";
+        return 1;
+    }
+    for (int i = 0; i <= 10; i++) // Ecriture de 11 floats dans le fichier
+        f_out_float << i + 0.2;
+    cout << f_out_float.tellp() << " éléments sont écrits dans le fichier.\n"; // affiche:  11 éléments sont écrits dans le fichier.
+    f_out_float.close();
+    cout << endl;
+    /////////////////////////////////////////////////////////////////
+
+    R_File_of_Int<float> f_in_float("essai.fic");
+    float n;
+    if (!f_in_float) {
+        cerr << "erreur à la création de essai.fic\n";
+        return 1;
+    }
+    f_in_float.seekg(0, ios::end);                                             // se positionne à la fin du fichier
+    cout << "Il y a " << f_in_float.tellg() << " éléments dans le fichier.\n"; // affiche:  Il y a 11 éléments dans le fichier.
+    f_in_float.seekg(0);                                                       // se positionne au début du fichier
+    while (1) {                                                                // affichage du contenu du fichier
+        f_in_float >> n;
+        if (f_in_float.eof())
+            break;
+        cout << n << " ";
+    }
+    f_in_float.clear(); // ne pas l'oublier ... sortie du while sur erreur eof
+    cout << endl;
+    f_in_float.close();
+    cout << endl;
+    /////////////////////////////////////////////////////////////////
+
+    RW_File_of_Int<float> f_io_float("essai.fic"); //s’il existe, il n'est pas écrasé
+    if (!f_io_float) {
+        cerr << "erreur à la création de essai.fic\n";
+        return 1;
+    }
+    f_io_float.seekp(0, ios::end);                                                 // se positionne à la fin du fichier
+    cout << "Il y a déjà " << f_io_float.tellp() << " éléments dans le fichier\n"; // affiche:  Il y a déjà 11 éléments dans le fichier
+    for (int i = 11; i <= 19; i++)
+        f_io_float << i + 0.2;
+    f_io_float.seekp(10); // se positionne sur le 11 ième entier
+    while (1) {           // affichage du contenu du fichier
+        f_io_float >> n;
+        if (f_io_float.eof())
+            break;
+        cout << n << " ";
+    }                   // affiche:  10 11 12 13 14 15 16 17 18 19
+    f_io_float.clear(); // ne pas l'oublier...sortie du while sur erreur eof
+    f_io_float.close();
+    cout << endl;
+#endif
+
     return 0;
 }
