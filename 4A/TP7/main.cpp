@@ -82,10 +82,11 @@ int main(void) {
     }
     for (int i = 0; i <= 10; i++) // Ecriture de 11 entiers dans le fichier
         f_out << i;
-    cout << f_out.tellp() << "éléments sont écrits dans le fichier.\n"; // affiche:  11 éléments sont écrits dans le fichier.
+    cout << f_out.tellp() << " éléments sont écrits dans le fichier.\n"; // affiche:  11 éléments sont écrits dans le fichier.
     f_out.close();
+    cout << endl;
     /////////////////////////////////////////////////////////////////
-    
+
     R_File_of_Int f_in("essai.fic");
     int entier;
     if (!f_in) {
@@ -104,15 +105,16 @@ int main(void) {
     f_in.clear(); // ne pas l'oublier ... sortie du while sur erreur eof
     cout << endl;
     f_in.close();
+    cout << endl;
     /////////////////////////////////////////////////////////////////
-    
+
     RW_File_of_Int f_io("essai.fic"); //s’il existe, il n'est pas écrasé
     if (!f_io) {
         cerr << "erreur à la création de essai.fic\n";
         return 1;
     }
-    f_io.seekp(0, ios::end);                                              // se positionne à la fin du fichier
-    cout << "Il ya déjà" << f_io.tellp() << "éléments dans le fichier\n"; // affiche:  Il y a déjà 11 éléments dans le fichier
+    f_io.seekp(0, ios::end);                                                 // se positionne à la fin du fichier
+    cout << "Il y a déjà " << f_io.tellp() << " éléments dans le fichier\n"; // affiche:  Il y a déjà 11 éléments dans le fichier
     for (int i = 11; i <= 19; i++)
         f_io << i;
     f_io.seekp(10); // se positionne sur le 11 ième entier
@@ -121,9 +123,10 @@ int main(void) {
         if (f_io.eof())
             break;
         cout << entier << " ";
-    }             // affiche:  0 1 2 3 45 6 7 8 9 10 11 12 13 14 15 16 17 18 19
+    }             // affiche:  10 11 12 13 14 15 16 17 18 19
     f_io.clear(); // ne pas l'oublier...sortie du while sur erreur eof
     f_io.close();
+    cout << endl;
 #endif
     return 0;
 }
