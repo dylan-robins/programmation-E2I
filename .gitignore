@@ -1,3 +1,6 @@
 **/bin/
 **/obj/
 **.tgz
+**.zip
+**.dat
+**.fic

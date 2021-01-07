@@ -155,6 +155,7 @@ istream& operator>>(istream& is, String& str) {
     is >> setw(2048) >> buffer;
     str._resize(strlen(buffer));
     strcpy(str._str, buffer);
+    str._len = strlen(buffer);
     return is;
 }
 
