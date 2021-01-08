@@ -1,5 +1,5 @@
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 
 using namespace std;
@@ -10,7 +10,8 @@ using namespace std;
 
 int read_num() {
     int n;
-    cout << "Entrez un nombre entier (0 pour quitter):" << endl << ">>> ";
+    cout << "Entrez un nombre entier (0 pour quitter):" << endl
+         << ">>> ";
     cin >> n;
     return n;
 }
@@ -28,12 +29,13 @@ void write_bin_file(string filename) {
     while ((tmp = read_num()) != 0) {
         ofile.write((char *)(&tmp), sizeof(tmp));
     }
-    
+
     ofile.close();
 }
 
 void read_bin_file(string filename) {
     ifstream ifile(filename, ios::in | ios::binary);
+
     int tmp;
     int i = 0;
 
@@ -43,19 +45,20 @@ void read_bin_file(string filename) {
     }
 
     cout << "Le fichier contient les nombres [";
-    
+
     while (true) {
         // tenter de lire un entier
         ifile.read((char *)(&tmp), sizeof(tmp));
         // si on a atteint la fin du fichier, sortir de la boucle
-        if (ifile.eof()) break;
+        if (ifile.eof())
+            break;
         // afficher l'entier
         cout << tmp << ", ";
     }
 
     // Effacer le ", " final et afficher un ']' à la place
     cout << "\b\b]" << endl;
-    
+
     ifile.close();
 }
 
@@ -71,9 +74,9 @@ void get_ints_from_bin_file(string filename) {
     while ((index = read_num()) != 0) {
         // vu qu'on indexe le fichier à partir de 1, on doit soustraire 1 pour
         // retomber sur un décalage qui a du sens...
-        index--; 
-        
-        ifile.seekg(index*sizeof(index), ios_base::beg);
+        index--;
+
+        ifile.seekg(index * sizeof(index), ios_base::beg);
         ifile.read((char *)&val, sizeof(val));
 
         // vérification de "l'indice"
@@ -81,16 +84,16 @@ void get_ints_from_bin_file(string filename) {
             cerr << "Erreur de dépassement: impossible d'accéder à l'élément " << index << endl;
             ifile.clear();
         } else {
-            cout << "nombre à l'indice " << index+1 << ": " << val << endl;
+            cout << "nombre à l'indice " << index + 1 << ": " << val << endl;
         }
     }
-    
+
     ifile.close();
 }
 
 int main(void) {
     string filename;
-    cout << "Entrez le nom du fichier à manipuler:" << endl 
+    cout << "Entrez le nom du fichier à manipuler:" << endl
          << ">>> ";
     cin >> filename;
 
