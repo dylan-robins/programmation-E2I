@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from sys import argv
 from color_print import cprint
 
 def fact(n):
@@ -50,9 +51,12 @@ def test():
         cprint("FAIL", 'red')
 
 if __name__ == "__main__":
-    ch = ""
-    tab = []
-    while len(ch) != 3:
-        ch = input("Entrez un mot de 3 lettres : >>> ")
-    remplir_tab_anagrammes(tab, ch)
-    print("Anagrams of", ch, ":", tab)
+    if len(argv) == 2 and argv[1] == "test":
+        test()
+    else:
+        ch = ""
+        tab = []
+        while len(ch) != 3:
+            ch = input("Entrez un mot de 3 lettres : >>> ")
+        remplir_tab_anagrammes(tab, ch)
+        print("Anagrams of", ch, ":", tab)

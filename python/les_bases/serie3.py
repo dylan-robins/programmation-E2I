@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 def quantieme_2020():
     nb_jours = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     
@@ -49,5 +51,7 @@ def print_matrix(matrix):
         print("")
 
 if __name__ == "__main__":
+    print("Test quantieme_2020...")
     quantieme_2020()
+    print("Test create_2d_array...")
     create_2d_array()

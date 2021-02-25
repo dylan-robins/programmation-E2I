@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 entr = {}
 entr["nb_employes"] = int(input("Entrez le nombre d'employés : "))
 
@@ -7,7 +9,7 @@ for i in range(entr["nb_employes"]):
     e = {}
     e["nom"] = input("Entrez son nom : ")
     e["prenom"] = input("Entrez son prénom : ")
-    e["nb_enfants"] = input("Entrez son nombre d'enfants : ")
+    e["nb_enfants"] = int(input("Entrez son nombre d'enfants : "))
     entr["tab_emp"][i] = e
 
 if __name__ == "__main__":

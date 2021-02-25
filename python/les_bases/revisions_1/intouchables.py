@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from color_print import cprint
 from math import ceil, sqrt
+from sys import argv
+from color_print import cprint
 
 def somme_div(y):
     upper = ceil(sqrt(y))+1
@@ -25,16 +26,19 @@ def test():
 
 
 if __name__ == "__main__":
-    x = input("Number to test (between 0 and 125)?\n>>> ")
-    try:
-        x = int(x)
-        if not (0 < x <= 125):
-            raise ValueError
-
-    except ValueError:
-        print("Error: couldn't parse", x, "as an integer")
-
-    if intouchable(x):
-        print(x, "est intouchable")
+    if len(argv) == 2 and argv[1] == "test":
+        test()
     else:
-        print(x, "n'est pas intouchable")
+        x = input("Number to test (between 0 and 125)?\n>>> ")
+        try:
+            x = int(x)
+            if not (0 < x <= 125):
+                raise ValueError
+
+        except ValueError:
+            print("Error: couldn't parse", x, "as an integer")
+
+        if intouchable(x):
+            print(x, "est intouchable")
+        else:
+            print(x, "n'est pas intouchable")

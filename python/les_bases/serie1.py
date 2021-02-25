@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 def is_even_and_div_3(n):
     return (n % 2 == 0) and (n % 3 == 0)
 
@@ -10,7 +12,7 @@ def str_is_div_3(arr):
 
 def question4():
     x = input("Enter the value of x : >>> ")
-    y = input("Enter the value of Y : >>> ")
+    y = input("Enter the value of y : >>> ")
 
     print("x =", x, ", y =", y)
 
@@ -27,20 +29,28 @@ def question5():
     print(f"Un cercle de rayon {r} a pour diamètre {d}, pour circonférence {p} et pour surface {s}")
 
 if __name__ == "__main__":
+    print("Test is_even_and_div_3... ", end="")
     assert(is_even_and_div_3(6))
     assert(not is_even_and_div_3(2))
     assert(not is_even_and_div_3(3))
     assert(not is_even_and_div_3(15))
+    print("Ok")
 
+    print("Test is_between_0_20... ", end="")
     assert(is_between_0_20(0))
     assert(is_between_0_20(20))
     assert(is_between_0_20(10))
     assert(not is_between_0_20(-1))
     assert(not is_between_0_20(25))
+    print("Ok")
 
+    print("Test str_is_div_3... ", end="")
     assert(str_is_div_3("6"))
     assert(str_is_div_3("15"))
     assert(not str_is_div_3("4"))
+    print("Ok")
 
+    print("Test question4... ")
     question4()
+    print("Test question5... ")
     question5()

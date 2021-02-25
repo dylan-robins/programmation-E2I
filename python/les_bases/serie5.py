@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 ##############################################################################
 # Question 1
 ##############################################################################
@@ -61,7 +63,7 @@ def remplir_enseignement(enseignement):
 
 def aff_par_filiere(enseignements):
     for ens in sorted(enseignements, key=lambda ens: ens["filiere"]):
-        print(f"{ens['code']}: filiere {ens['filiere']} - reponsable{ens['responsable']}")
+        print(f"{ens['code']}: filiere {ens['filiere']} - reponsable {ens['responsable']}")
 
 def aff_par_respo(enseignements):
     for ens in sorted(enseignements, key=lambda ens: ens["responsable"]):
@@ -77,10 +79,16 @@ def question3():
         enseignements.append( {"code": ens} )
         remplir_enseignement(enseignements[-1])
 
+    print("Affichage par filière :")
     aff_par_filiere(enseignements)
+    
+    print("Affichage par responsable :")
     aff_par_respo(enseignements)
 
 if __name__ == "__main__":
+    print("Test question 1:")
     question1()
+    print("Test question 2:")
     question2()
+    print("Test question 3:")
     question3()

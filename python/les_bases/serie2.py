@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 def t_or_f():
     user_data = input("Enter t or f: >>> ")
     if user_data == "t":
@@ -48,7 +50,8 @@ def time_in_1s(h, m, s):
 
 def average():
     grades = []
-    while True:
+    user_data = 0
+    while 0 <= float(user_data) <= 20:
         user_data = input("Enter a grade: >>> ")
         try:
             grades.append(float(user_data))
@@ -65,10 +68,23 @@ def disp_range(a, b):
         print(i, end=", ")
     for i in range(b, a-1, -1):
         print(i, end=", ")
+    print("")
 
 if __name__ == "__main__":
+    print("Test t_or_f... ")
     t_or_f()
+    t_or_f()
+    t_or_f()
+    t_or_f()
+    
+    print("Test quadrant... ")
     quadrant(2, -5)
+
+    print("Test time_in_1s... ")
     time_in_1s(22, 8, 59)
+
+    print("Test average... ")
     average()
+
+    print("Test disp_range... ")
     disp_range(3, 9)

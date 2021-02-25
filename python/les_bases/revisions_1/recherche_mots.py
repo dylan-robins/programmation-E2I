@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from sys import argv
 from color_print import cprint
 
 def compter_mots(ch):
@@ -50,25 +51,28 @@ def test():
         cprint("FAIL", 'red')
 
 if __name__ == "__main__":
-    phrase = input("Entrez une phrase:\n>>> ")
-    nb_mots = compter_mots(phrase)
-    tab = []
-    # pour chaque mot
-    for i in range(nb_mots):
-        # trouver sa 1e occurence dans la chaine
-        ieme_mot, pos = retourner_mot(phrase, i)
-        # trouver l'indice de ce mot dans notre dict
-        idex = chercher_mot(phrase, tab, ieme_mot)
-        if idex == -1:
-            # 1e occurence du mot: le rajouter à la liste
-            tab.append( {"mot": ieme_mot, "occurences": 1} )
-        else:
-            # incrémenter le compteur
-            tab[idex]["occurences"] += 1
-    
-    for word in tab:
-        print(
-            f"{word['mot']} : {word['occurences']}",
-            "occurence" if word['occurences'] == 1 else "occurences"
-        )
+    if len(argv) == 2 and argv[1] == "test":
+        test()
+    else:
+        phrase = input("Entrez une phrase:\n>>> ")
+        nb_mots = compter_mots(phrase)
+        tab = []
+        # pour chaque mot
+        for i in range(nb_mots):
+            # trouver sa 1e occurence dans la chaine
+            ieme_mot, pos = retourner_mot(phrase, i)
+            # trouver l'indice de ce mot dans notre dict
+            idex = chercher_mot(phrase, tab, ieme_mot)
+            if idex == -1:
+                # 1e occurence du mot: le rajouter à la liste
+                tab.append( {"mot": ieme_mot, "occurences": 1} )
+            else:
+                # incrémenter le compteur
+                tab[idex]["occurences"] += 1
+        
+        for word in tab:
+            print(
+                f"{word['mot']} : {word['occurences']}",
+                "occurence" if word['occurences'] == 1 else "occurences"
+            )
 
