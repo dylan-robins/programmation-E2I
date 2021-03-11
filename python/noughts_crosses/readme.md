@@ -3,6 +3,8 @@
 A very simple noughts & crosses game built to learn the basics of GTK3 in
 Python.
 
+![A screenshot of the application](./capture.png)
+
 ## Dependancies
 
 This program uses the GTK3.0 Python bindings provided by the PyGObject package.
