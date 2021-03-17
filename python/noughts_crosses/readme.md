@@ -16,3 +16,13 @@ In order to run the scripts you will need to install the following packages :
 - gir1.2-gtk-3.0
 
 This has been show to work on Debian 10 and Ubuntu 18.04 LTS.
+
+In order to run this program on Red Hat / Centos systems, you'll have to install the following with yum :
+- gcc
+- gobject-introspection-devel
+- cairo-devel
+- pkg-config
+- python3-devel
+- gtk3
+
+
