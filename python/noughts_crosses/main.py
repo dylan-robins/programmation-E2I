@@ -38,6 +38,7 @@ class list_2d(list):
 class morpion(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title="Morpion")
+        self.set_default_size(200, 200)
 
         self.current_player = "player"
 
@@ -51,8 +52,15 @@ class morpion(Gtk.Window):
 
     def build_game_ui(self, rows=3, cols=3):
         # Make a grid to contain the 3x3 buttons
+        aspect_frame = Gtk.AspectFrame(ratio=1.0)
         grid = Gtk.Grid(column_homogeneous=True)
-        self.top_level_frame.pack_start(grid, True, True, 0)
+        grid.set_column_spacing(5)
+        grid.set_row_spacing(5)
+        grid.set_hexpand(True)
+        grid.set_vexpand(True)
+
+        aspect_frame.add(grid)
+        self.top_level_frame.pack_start(aspect_frame, True, True, 0)
 
         # create the buttons
         for y in range(rows):
