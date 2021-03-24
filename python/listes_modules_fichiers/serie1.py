@@ -5,7 +5,7 @@
 # EXO 1
 ###############################################################################
 def exercice1(catalogue):
-    matières_théoriques = [ue for ue in catalogue if ue[3] == 'T']
+    matières_théoriques = [ue for ue in catalogue if ue[2] == 'T']
     print(
         "nombre de matières théoriques présentes dans le catalogue:",
         len(matières_théoriques)
@@ -18,7 +18,7 @@ def exercice2(promo):
     noms = [etu[1] for etu in promo]
     print(
         "Liste des noms d'étudiants dans l'ordre alphabétique:",
-        " ".join(noms.sort())
+        " ".join(sorted(noms))
     )
     
 ###############################################################################
