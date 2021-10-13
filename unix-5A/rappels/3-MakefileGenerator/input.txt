@@ -1,0 +1,9 @@
+truc
+bidule
+end
+truc
+common
+end
+bidule
+common
+end
