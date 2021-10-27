@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void child_task(int childId, int pid) {
-    printf("I'm child %d, running in process %d\n", childId, pid);
+void child_task(int childId) {
+    printf("I'm child %d, running in process %d\n", childId, getpid());
     exit(0);
 }
 
@@ -12,8 +12,8 @@ int main() {
     printf("Hello from the parent process (%d)\n", getpid());
     for (int child = 1; child <= 4; child++) {
         int pid = fork();
-        if (pid != 0) {
-            child_task(child, pid);
+        if (pid == 0) {
+            child_task(child);
         }
     }
 
