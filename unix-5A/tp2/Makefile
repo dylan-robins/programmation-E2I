@@ -3,7 +3,7 @@ CFLAGS := -Wall -pedantic -std=c11
 BUILD_DIR := ./bin
 OBJ_DIR := $(BUILD_DIR)/obj
 
-PROGS := test_fork test_exec
+PROGS := test_fork test_exec mgrep
 
 all: $(BUILD_DIR) $(OBJ_DIR) $(PROGS:%=$(BUILD_DIR)/%)
 
@@ -13,6 +13,10 @@ $(BUILD_DIR)/test_fork: $(test_fork_objs:%=$(OBJ_DIR)/%)
 
 test_exec_objs := test_exec.o
 $(BUILD_DIR)/test_exec: $(test_exec_objs:%=$(OBJ_DIR)/%)
+	$(CC) $(CFLAGS) $^ -o $@
+
+mgrep_objs := mgrep.o
+$(BUILD_DIR)/mgrep: $(mgrep_objs:%=$(OBJ_DIR)/%)
 	$(CC) $(CFLAGS) $^ -o $@
 
 # cette ligne compile tous les .c et genere des .o avec le meme nom
