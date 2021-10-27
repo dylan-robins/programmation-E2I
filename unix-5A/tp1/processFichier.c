@@ -52,8 +52,32 @@ void openUnlinkWriteAndCheck(char * filename) {
     int fileDescr = 0;
     fileDescr = open(filename, O_APPEND, 0644);
 
+    unlink(filename);
+
+    if (file_exists(filename)) {
+        printf("File exists even though it was unlinked!\n");
+    } else {
+        printf("File doesn't exist after being unlinked!\n");
+    }
+
+    const char * fileContent = "Content written after deletion\n";
     write(fileDescr, fileContent, strlen(fileContent));
+    
+    if (file_exists(filename)) {
+        printf("File exists after writing to stale handle!\n");
+    } else {
+        printf("File doesn't exist after writing to stale handle!\n");
+    }
+
+    waitForEnter();
+    
     close(fileDescr);
+
+    if (file_exists(filename)) {
+        printf("File exists after closing!\n");
+    } else {
+        printf("File doesn't exist after closing!\n");
+    }
 }
 
 int main(int argc, char** argv) {
@@ -63,9 +87,12 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
-    createAndPopulateTextFile(argv[1]);
-    openAndReadTextFile(argv[1]);
+    char * filename = argv[1];
+
+    createAndPopulateTextFile(filename);
+    openAndReadTextFile(filename);
     waitForEnter();
+    openUnlinkWriteAndCheck(filename);
 
     return 0;
 }
