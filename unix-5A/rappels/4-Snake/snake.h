@@ -1,7 +1,6 @@
 #ifndef __SNAKE_H__
 #define __SNAKE_H__
 
-
 typedef enum {
     NORTH,
     EAST,
@@ -12,7 +11,8 @@ typedef enum {
 
 // Noeud d'une liste chaînée
 typedef struct snakeBodyPart_s {
-    unsigned int x, y;
+    int x, y;
+    struct snakeBodyPart_s * prev;
     struct snakeBodyPart_s * next;
 } snakeBodyPart;
 
@@ -20,15 +20,17 @@ typedef struct snakeBodyPart_s {
 typedef struct {
     direction heading;
     snakeBodyPart * head;
+    snakeBodyPart * tail;
 } snake;
 
-snake newSnake(unsigned int x, unsigned int y);
+snake newSnake(int x, int y);
 void deleteSnake(snake s);
-snakeBodyPart * newSnakeBodypart(unsigned int x, unsigned int y);
+snakeBodyPart * newSnakeBodypart(int x, int y);
 void moveSnake(snake * s);
+void lengthenSnake(snake *s);
 
-int isSnakeHead(snake s, unsigned int x, unsigned int y);
-int isSnakeBody(snake s, unsigned int x, unsigned int y);
+int isSnakeHead(snake s, int x, int y);
+int isSnakeBody(snake s, int x, int y);
 
 int printSnake(snake s);
 

@@ -15,6 +15,7 @@ processPool* newProcessPool(size_t capacity) {
 
 void deleteProcessPool(processPool* pp) {
     free(pp->pids);
+    free(pp);
 }
 
 static int getProcessIndex(processPool* pp, pid_t pid) {
